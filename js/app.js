@@ -1411,7 +1411,7 @@ async function exportConfig() {
     config['hash'] = await sha256(JSON.stringify(config['data']));  // 计算数据的哈希值，用于校验
 
     // 将配置数据保存为 JSON 文件
-    saveStringAsFile(JSON.stringify(config), 'LibreTV-Settings_' + times + '.json');
+    saveStringAsFile(JSON.stringify(config), '8199影视-Settings_' + times + '.json');
 }
 
 // 将字符串保存为文件
