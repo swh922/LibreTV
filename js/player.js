@@ -1,37 +1,35 @@
+// 改进返回功能
 function goBack(event) {
     // 防止默认链接行为
     if (event) event.preventDefault();
-
-    // 设置返回标志，通知首页恢复缓存搜索结果
-    localStorage.setItem('returningFromPlayer', 'true');
-
+    
     // 1. 优先检查URL参数中的returnUrl
     const urlParams = new URLSearchParams(window.location.search);
     const returnUrl = urlParams.get('returnUrl');
-
+    
     if (returnUrl) {
         // 如果URL中有returnUrl参数，优先使用
         window.location.href = decodeURIComponent(returnUrl);
         return;
     }
-
+    
     // 2. 检查localStorage中保存的lastPageUrl
     const lastPageUrl = localStorage.getItem('lastPageUrl');
     if (lastPageUrl && lastPageUrl !== window.location.href) {
         window.location.href = lastPageUrl;
         return;
     }
-
+    
     // 3. 检查是否是从搜索页面进入的播放器
     const referrer = document.referrer;
-
+    
     // 检查 referrer 是否包含搜索参数
     if (referrer && (referrer.includes('/s=') || referrer.includes('?s='))) {
         // 如果是从搜索页面来的，返回到搜索页面
         window.location.href = referrer;
         return;
     }
-
+    
     // 4. 如果是在iframe中打开的，尝试关闭iframe
     if (window.self !== window.top) {
         try {
@@ -42,13 +40,13 @@ function goBack(event) {
             console.error('调用父窗口closeVideoPlayer失败:', e);
         }
     }
-
+    
     // 5. 无法确定上一页，则返回首页
     if (!referrer || referrer === '') {
         window.location.href = '/';
         return;
     }
-
+    
     // 6. 以上都不满足，使用默认行为：返回上一页
     window.history.back();
 }
@@ -812,18 +810,12 @@ function renderEpisodes() {
         // 根据倒序状态计算真实的剧集索引
         const realIndex = episodesReversed ? currentEpisodes.length - 1 - index : index;
         const isActive = realIndex === currentEpisodeIndex;
-        // 尝试获取集数标题，如果没有则显示集数
-        const episodeTitle = typeof episode === 'object' && episode.name 
-            ? episode.name 
-            : `第${realIndex + 1}集`;
-        const episodeUrl = typeof episode === 'object' ? episode.url : episode;
 
         html += `
             <button id="episode-${realIndex}" 
                     onclick="playEpisode(${realIndex})" 
-                    class="px-4 py-2 ${isActive ? 'episode-active' : '!bg-[#222] hover:!bg-[#333] hover:!shadow-none'} !border ${isActive ? '!border-blue-500' : '!border-[#333]'} rounded-lg transition-colors text-center episode-btn whitespace-normal break-words" 
-                    title="${episodeTitle}">
-                ${episodeTitle}
+                    class="px-4 py-2 ${isActive ? 'episode-active' : '!bg-[#222] hover:!bg-[#333] hover:!shadow-none'} !border ${isActive ? '!border-blue-500' : '!border-[#333]'} rounded-lg transition-colors text-center episode-btn">
+                ${realIndex + 1}
             </button>
         `;
     });

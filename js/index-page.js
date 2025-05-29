@@ -24,18 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // 播放URL，不做额外处理，watch.html会处理重定向
         return;
     }
-
-    // 判断是否从播放页返回
-    const isReturningFromPlayer = localStorage.getItem('returningFromPlayer') === 'true';
-    if (isReturningFromPlayer) {
-        localStorage.removeItem('returningFromPlayer');
-        if (typeof restoreSearchFromCache === 'function') {
-            const restored = restoreSearchFromCache();
-            if (restored) {
-                return; // 直接恢复缓存结果，跳过后续搜索逻辑
-            }
-        }
-    }
     
     // 检查页面路径中的搜索参数 (格式: /s=keyword)
     const path = window.location.pathname;
